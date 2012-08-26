@@ -83,43 +83,43 @@ object HTTPMethod extends Enumeration {
 	val Trace	= Value("Trace")
 }
 
+abstract class HTTPHeader extends Enumeration {
+	type HTTPHeader = Value
+}
 
-/**
- * Request Headers 
-
-Accept               
-Accept-Charset       
-Accept-Datetime      
-Accept-Encoding      
-Accept-Language      
-Authorization        
-Cache-Control        
-Connection           
-Content-Length       
-Content-MD5          
-Content-Type         
-Cookie               
-Date                 
-Expect               
-From                 
-Host                 
-If-Match             
-If-Modified-Since    
-If-None-Match        
-If-Range             
-If-Unmodified-Since  
-Max-Forwards         
-Pragma               
-Proxy-Authorization  
-Range                
-Referer[sic]         
-TE                   
-Upgrade              
-User-Agent           
-Via                  
-Warning
-
-*/
+object HTTPRequestHeader extends HTTPHeader {
+	val Accept		= Value("Accept")
+	val AcceptCharset	= Value("Accept-Charset")
+	val AcceptDatetime	= Value("Accept-Datetime")
+	val AcceptEncoding	= Value("Accept-Encoding")
+	val AcceptLanguage	= Value("Accept-Language")
+	val Authorization	= Value("Authorization")
+	val CacheControl	= Value("Cache-Control")
+	val Connection		= Value("Connection")
+	val ContentLength	= Value("Content-Length")
+	val ContentMD5		= Value("Content-MD5")
+	val ContentType		= Value("Content-Type")
+	val Cookie		= Value("Cookie")
+	val Date		= Value("Date")
+	val Expect		= Value("Expect")
+	val From		= Value("From")
+	val Host		= Value("Host")
+	val IfMatch		= Value("If-Match")
+	val IfModifiedSince	= Value("If-Modified-Since")
+	val IfNoneMatch		= Value("If-None-Match")
+	val IfRange		= Value("If-Range")
+	val IfUnmodifiedSince	= Value("If-Unmodified-Since")
+	val MaxForwards		= Value("Max-Forwards")
+	val Pragma		= Value("Pragma")
+	val ProxyAuthorization	= Value("Proxy-Authorization")
+	val Range		= Value("Range")
+	val Referer		= Value("Referer")
+	val TE			= Value("TE")
+	val Upgrade		= Value("Upgrade")
+	val UserAgent		= Value("User-Agent")
+	val Via			= Value("Via")
+	val Warning		= Value("Warning")
+}
 
 /**
  * Response Headers
