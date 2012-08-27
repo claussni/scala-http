@@ -121,41 +121,39 @@ object HTTPRequestHeader extends HTTPHeader {
 	val Warning		= Value("Warning")
 }
 
-/**
- * Response Headers
+object HTTPResponseHeader extends HTTPHeader {
+	var AcceptRanges		= Value("Accept-Ranges")
+	var Age				= Value("Age")
+	var Allow			= Value("Allow")
+	var CacheControl		= Value("Cache-Control")
+	var Connection			= Value("Connection")
+	var ContentEncoding		= Value("Content-Encoding")
+	var ContentLanguage		= Value("Content-Language")
+	var ContentLength		= Value("Content-Length")
+	var ContentLocation		= Value("Content-Location")
+	var ContentMD5			= Value("Content-MD5")
+	var ContentDisposition		= Value("Content-Disposition")
+	var ContentRange		= Value("Content-Range")
+	var ContentType			= Value("Content-Type")
+	var Date			= Value("Date")
+	var ETag			= Value("ETag")
+	var Expires			= Value("Expires")
+	var LastModified		= Value("Last-Modified")
+	var Link			= Value("Link")
+	var Location			= Value("Location")
+	var P3P				= Value("P3P")
+	var Pragma			= Value("Pragma")
+	var ProxyAuthenticate		= Value("Proxy-Authenticate")
+	var Refresh			= Value("Refresh")
+	var RetryAfter			= Value("Retry-After")
+	var Server			= Value("Server")
+	var SetCookie			= Value("Set-Cookie")
+	var StrictTransportSecurity	= Value("Strict-Transport-Security")
+	var Trailer			= Value("Trailer")
+	var TransferEncoding		= Value("Transfer-Encoding")
+	var Vary			= Value("Vary")
+	var Via				= Value("Via")
+	var Warning			= Value("Warning")
+	var WWWAuthenticate		= Value("WWW-Authenticate")
+}
 
-Accept-Ranges                    
-Age                              
-Allow                            
-Cache-Control                    
-Connection                       
-Content-Encoding                 
-Content-Language                 
-Content-Length                   
-Content-Location                 
-Content-MD5                      
-Content-Disposition
-Content-Range                    
-Content-Type                     
-Date                             
-ETag                             
-Expires                          
-Last-Modified                    
-Link                             
-Location                         
-P3P                              
-Pragma                           
-Proxy-Authenticate               
-Refresh                          
-Retry-After                      
-Server                           
-Set-Cookie                       
-Strict-Transport-Security        
-Trailer                          
-Transfer-Encoding                
-Vary                             
-Via                              
-Warning                          
-WWW-Authenticate
-
-*/
