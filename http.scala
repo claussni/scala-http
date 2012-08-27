@@ -65,10 +65,12 @@ case class HTTPStatus(val code: java.lang.Integer) {
 	override def toString = code + " " + messages(code)
 }
 
-object HTTPVersion extends Enumeration {
-	type HTTPVersion = Value
-	val HTTP10 = Value("HTTP/1.0")
-	val HTTP11 = Value("HTTP/1.1") 
+case class HTTPVersion(val version: String) {
+	def > (v: HTTPVersion) = v.version < version
+	def < (v: HTTPVersion) = v.version > version
+
+	override
+	def toString = "HTTP/" + version;
 }
 
 object HTTPMethod extends Enumeration {
