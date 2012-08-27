@@ -67,8 +67,8 @@ case class HTTPStatus(val code: java.lang.Integer) {
 
 object HTTPVersion extends Enumeration {
 	type HTTPVersion = Value
-	val HTTP10 = Value("HTTP 1.0")
-	val HTTP11 = Value("HTTP 1.1") 
+	val HTTP10 = Value("HTTP/1.0")
+	val HTTP11 = Value("HTTP/1.1") 
 }
 
 object HTTPMethod extends Enumeration {
