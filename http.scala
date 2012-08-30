@@ -123,7 +123,7 @@ object HTTPRequestHeader extends HTTPElement {
 	val Range		= Value("Range")
 	val Referer		= Value("Referer")
 	val TE			= Value("TE")
-	val Upgrade		= Value("Upgrade")
+	val Upgrade		= Value("Upgrade", HTTPVersion("1.1"))
 	val UserAgent		= Value("User-Agent")
 	val Via			= Value("Via")
 	val Warning		= Value("Warning", HTTPVersion("1.1"))
