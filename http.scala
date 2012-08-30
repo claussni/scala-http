@@ -75,7 +75,7 @@ case class HTTPVersion(val version: String) {
 	def toString = "HTTP/" + version;
 
 	def supports(element: HTTPElement#Value) = true
-	def supports(element: HTTPElement#ValueSince) = header.since >= this
+	def supports(element: HTTPElement#ValueSince) = element.since >= this
 }
 
 abstract class HTTPElement extends Enumeration {
