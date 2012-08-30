@@ -74,28 +74,28 @@ case class HTTPVersion(val version: String) {
 	override
 	def toString = "HTTP/" + version;
 
-	def supports(header: HTTPHeader#Value) = true
-	def supports(header: HTTPHeader#ValueSince) = header.since >= this
+	def supports(element: HTTPElement#Value) = true
+	def supports(element: HTTPElement#ValueSince) = header.since >= this
 }
 
-object HTTPMethod extends Enumeration {
+abstract class HTTPElement extends Enumeration {
+	class ValueSince(name: String, val since: HTTPVersion) extends Val(nextId, name)
+	protected final def Value(name: String, since: HTTPVersion): ValueSince = new ValueSince(name, since)
+}
+
+object HTTPMethod extends HTTPElement {
 	type HTTPMethod = Value
 	val Connect 	= Value("Connect")
 	val Delete 	= Value("Delete")
 	val Get		= Value("Get")
 	val Head 	= Value("Head")
-	val Options	= Value("Options")
+	val Options	= Value("Options", HTTPVersion("1.1"))
 	val Post	= Value("Post")
 	val Put		= Value("Put")
 	val Trace	= Value("Trace")
 }
 
-abstract class HTTPHeader extends Enumeration {
-	class ValueSince(name: String, val since: HTTPVersion) extends Val(nextId, name)
-	protected final def Value(name: String, since: HTTPVersion): ValueSince = new ValueSince(name, since)
-}
-
-object HTTPRequestHeader extends HTTPHeader {
+object HTTPRequestHeader extends HTTPElement {
 	val Accept		= Value("Accept")
 	val AcceptCharset	= Value("Accept-Charset")
 	val AcceptDatetime	= Value("Accept-Datetime")
@@ -129,7 +129,7 @@ object HTTPRequestHeader extends HTTPHeader {
 	val Warning		= Value("Warning", HTTPVersion("1.1"))
 }
 
-object HTTPResponseHeader extends HTTPHeader {
+object HTTPResponseHeader extends HTTPElement {
 	var AcceptRanges		= Value("Accept-Ranges")
 	var Age				= Value("Age")
 	var Allow			= Value("Allow")
