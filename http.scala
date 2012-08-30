@@ -66,8 +66,10 @@ case class HTTPStatus(val code: java.lang.Integer) {
 }
 
 case class HTTPVersion(val version: String) {
-	def > (v: HTTPVersion) = v.version < version
-	def < (v: HTTPVersion) = v.version > version
+	def >  (v: HTTPVersion) = v.version <  version
+	def <  (v: HTTPVersion) = v.version >  version
+	def <= (v: HTTPVersion) = v.version <= version
+	def >= (v: HTTPVersion) = v.version >= version
 
 	override
 	def toString = "HTTP/" + version;
