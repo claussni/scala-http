@@ -73,6 +73,9 @@ case class HTTPVersion(val version: String) {
 
 	override
 	def toString = "HTTP/" + version;
+
+	def supports(header: HTTPHeader#Value) = true
+	def supports(header: HTTPHeader#ValueSince) = header.since >= this
 }
 
 object HTTPMethod extends Enumeration {
@@ -88,7 +91,8 @@ object HTTPMethod extends Enumeration {
 }
 
 abstract class HTTPHeader extends Enumeration {
-	type HTTPHeader = Value
+	class ValueSince(name: String, val since: HTTPVersion) extends Val(nextId, name)
+	protected final def Value(name: String, since: HTTPVersion): ValueSince = new ValueSince(name, since)
 }
 
 object HTTPRequestHeader extends HTTPHeader {
@@ -98,7 +102,7 @@ object HTTPRequestHeader extends HTTPHeader {
 	val AcceptEncoding	= Value("Accept-Encoding")
 	val AcceptLanguage	= Value("Accept-Language")
 	val Authorization	= Value("Authorization")
-	val CacheControl	= Value("Cache-Control")
+	val CacheControl	= Value("Cache-Control", HTTPVersion("1.1"))
 	val Connection		= Value("Connection")
 	val ContentLength	= Value("Content-Length")
 	val ContentMD5		= Value("Content-MD5")
@@ -107,7 +111,7 @@ object HTTPRequestHeader extends HTTPHeader {
 	val Date		= Value("Date")
 	val Expect		= Value("Expect")
 	val From		= Value("From")
-	val Host		= Value("Host")
+	val Host		= Value("Host", HTTPVersion("1.1"))
 	val IfMatch		= Value("If-Match")
 	val IfModifiedSince	= Value("If-Modified-Since")
 	val IfNoneMatch		= Value("If-None-Match")
@@ -115,14 +119,14 @@ object HTTPRequestHeader extends HTTPHeader {
 	val IfUnmodifiedSince	= Value("If-Unmodified-Since")
 	val MaxForwards		= Value("Max-Forwards")
 	val Pragma		= Value("Pragma")
-	val ProxyAuthorization	= Value("Proxy-Authorization")
+	val ProxyAuthorization	= Value("Proxy-Authorization", HTTPVersion("1.1"))
 	val Range		= Value("Range")
 	val Referer		= Value("Referer")
 	val TE			= Value("TE")
 	val Upgrade		= Value("Upgrade")
 	val UserAgent		= Value("User-Agent")
 	val Via			= Value("Via")
-	val Warning		= Value("Warning")
+	val Warning		= Value("Warning", HTTPVersion("1.1"))
 }
 
 object HTTPResponseHeader extends HTTPHeader {
@@ -130,7 +134,7 @@ object HTTPResponseHeader extends HTTPHeader {
 	var Age				= Value("Age")
 	var Allow			= Value("Allow")
 	var CacheControl		= Value("Cache-Control")
-	var Connection			= Value("Connection")
+	var Connection			= Value("Connection", HTTPVersion("1.1"))
 	var ContentEncoding		= Value("Content-Encoding")
 	var ContentLanguage		= Value("Content-Language")
 	var ContentLength		= Value("Content-Length")
@@ -147,16 +151,16 @@ object HTTPResponseHeader extends HTTPHeader {
 	var Location			= Value("Location")
 	var P3P				= Value("P3P")
 	var Pragma			= Value("Pragma")
-	var ProxyAuthenticate		= Value("Proxy-Authenticate")
+	var ProxyAuthenticate		= Value("Proxy-Authenticate", HTTPVersion("1.1"))
 	var Refresh			= Value("Refresh")
 	var RetryAfter			= Value("Retry-After")
 	var Server			= Value("Server")
 	var SetCookie			= Value("Set-Cookie")
 	var StrictTransportSecurity	= Value("Strict-Transport-Security")
-	var Trailer			= Value("Trailer")
-	var TransferEncoding		= Value("Transfer-Encoding")
+	var Trailer			= Value("Trailer", HTTPVersion("1.1"))
+	var TransferEncoding		= Value("Transfer-Encoding", HTTPVersion("1.1"))
 	var Vary			= Value("Vary")
-	var Via				= Value("Via")
+	var Via				= Value("Via", HTTPVersion("1.1"))
 	var Warning			= Value("Warning")
 	var WWWAuthenticate		= Value("WWW-Authenticate")
 }
