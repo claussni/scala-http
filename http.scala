@@ -77,14 +77,14 @@ abstract class HTTPElement extends Enumeration {
 }
 
 object HTTPMethod extends HTTPElement {
-	val Connect 	= Value("CONNECT")
-	val Delete 	= Value("DELETE")
+	val Connect 	= Value("CONNECT", HTTPVersion("1.1"))
+	val Delete 	= Value("DELETE", HTTPVersion("1.1"))
 	val Get		= Value("GET")
 	val Head 	= Value("HEAD")
 	val Options	= Value("OPTIONS", HTTPVersion("1.1"))
 	val Post	= Value("POST")
-	val Put		= Value("PUT")
-	val Trace	= Value("TRACE")
+	val Put		= Value("PUT", HTTPVersion("1.1"))
+	val Trace	= Value("TRACE", HTTPVersion("1.1"))
 }
 
 object HTTPRequestHeader extends HTTPElement {
