@@ -87,7 +87,6 @@ abstract class HTTPElement extends Enumeration {
 }
 
 object HTTPMethod extends HTTPElement {
-	type HTTPMethod = Value
 	val Connect 	= Value("CONNECT")
 	val Delete 	= Value("DELETE")
 	val Get		= Value("GET")
