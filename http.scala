@@ -1,69 +1,57 @@
-// TODO There are 24 new status codes in HTTP/1.1;
 case class HTTPStatus(val code: java.lang.Integer) {
 	val messages = Map (
-		100 ->  "Continued",
-		101 ->  "Switching Protocols",
-		102 ->  "Processing",
+		100 ->  ("Continued", HTTPVersion("1.1")),
+		101 ->  ("Switching Protocols", HTTPVersion("1.1")),
 		200 ->  "OK",
 		201 ->  "Created",
 		202 ->  "Accepted",
-		203 ->  "Non-Authoritative Information",
+		203 ->  ("Non-Authoritative Information", HTTPVersion("1.1")),
 		204 ->  "No Content",
-		205 ->  "Reset Content",
-		206 ->  "Partial Content",
-		207 ->  "Multi-Status",
-		208 ->  "Already Reported",
-		226 ->  "IM Used",
+		205 ->  ("Reset Content", HTTPVersion("1.1")),
+		206 ->  ("Partial Content", HTTPVersion("1.1")),
 		300 ->  "Multiple Choices",
 		301 ->  "Moved Permanently",
 		302 ->  "Found",
-		303 ->  "See Other",
+		303 ->  ("See Other", HTTPVersion("1.1")),
 		304 ->  "Not Modified",
-		305 ->  "Use Proxy",
-		306 ->  "Reserved",
-		307 ->  "Temporary Redirect",
-		308 ->  "Permanent Redirect",
+		305 ->  ("Use Proxy", HTTPVersion("1.1")),
+		307 ->  ("Temporary Redirect", HTTPVersion("1.1")),
 		400 ->  "Bad Request",
 		401 ->  "Unauthorized",
-		402 ->  "Payment Required",
+		402 ->  ("Payment Required", HTTPVersion("1.1")),
 		403 ->  "Forbidden",
 		404 ->  "Not Found",
-		405 ->  "Method Not Allowed",
-		406 ->  "Not Acceptable",
-		407 ->  "Proxy Authentication Required",
-		408 ->  "Request Timeout",
-		409 ->  "Conflict",
-		410 ->  "Gone",
-		411 ->  "Length Required",
-		412 ->  "Precondition Failed",
-		413 ->  "Request Entity Too Large",
-		414 ->  "Request-URI Too Long",
-		415 ->  "Unsupported Media Type",
-		416 ->  "Requested Range Not Satisfiable",
-		417 ->  "Expectation Failed",
-		422 ->  "Unprocessable Entity",
-		423 ->  "Locked",
-		424 ->  "Failed Dependency",
-		426 ->  "Upgrade Required",
-		427 ->  "Unassigned",
-		428 ->  "Precondition Required",
-		429 ->  "Too Many Requests",
-		430 ->  "Unassigned",
-		431 ->  "Request Header Fields Too Large",
+		405 ->  ("Method Not Allowed", HTTPVersion("1.1")),
+		406 ->  ("Not Acceptable", HTTPVersion("1.1")),
+		407 ->  ("Proxy Authentication Required", HTTPVersion("1.1")),
+		408 ->  ("Request Timeout", HTTPVersion("1.1")),
+		409 ->  ("Conflict", HTTPVersion("1.1")),
+		410 ->  ("Gone", HTTPVersion("1.1")),
+		411 ->  ("Length Required", HTTPVersion("1.1")),
+		412 ->  ("Precondition Failed", HTTPVersion("1.1")),
+		413 ->  ("Request Entity Too Large", HTTPVersion("1.1")),
+		414 ->  ("Request-URI Too Long", HTTPVersion("1.1")),
+		415 ->  ("Unsupported Media Type", HTTPVersion("1.1")),
+		416 ->  ("Requested Range Not Satisfiable", HTTPVersion("1.1")),
+		417 ->  ("Expectation Failed", HTTPVersion("1.1")),
 		500 ->  "Internal Server Error",
 		501 ->  "Not Implemented",
 		502 ->  "Bad Gateway",
 		503 ->  "Service Unavailable",
-		504 ->  "Gateway Timeout",
-		505 ->  "HTTP Version Not Supported",
-		506 ->  "Variant Also Negotiates (Experimental)",
-		507 ->  "Insufficient Storage",
-		508 ->  "Loop Detected",
-		509 ->  "Unassigned",
-		510 ->  "Not Extended",
-		511 ->  "Network Authentication Required"
+		504 ->  ("Gateway Timeout", HTTPVersion("1.1")),
+		505 ->  ("HTTP Version Not Supported", HTTPVersion("1.1"))
 		);
-	override def toString = code + " " + messages(code)
+	def message =
+		messages(code) match {
+			case Tuple2(msg, _) => msg
+			case msg: String => msg
+		}
+	def since: HTTPVersion =
+		messages(code) match {
+			case Tuple2(_, since: HTTPVersion) => since
+			case _ => HTTPVersion("1.0")
+		}
+	override def toString = code + " " + message
 }
 
 case class HTTPVersion(val version: String) {
@@ -75,9 +63,10 @@ case class HTTPVersion(val version: String) {
 	override
 	def toString = "HTTP/" + version;
 
-	def supports(element: HTTPElement#Value) = 
+	def supports(element: Any) = 
 		element match {
 			case vs: HTTPElement#ValueSince => { vs.since >= this }
+			case st: HTTPStatus => { st.since >= this }
 			case _ => true
 		}
 }
