@@ -74,8 +74,11 @@ case class HTTPVersion(val version: String) {
 	override
 	def toString = "HTTP/" + version;
 
-	def supports(element: HTTPElement#Value) = true
-	def supports(element: HTTPElement#ValueSince) = element.since >= this
+	def supports(element: HTTPElement#Value) = 
+		element match {
+			case vs: HTTPElement#ValueSince => { vs.since >= this }
+			case _ => true
+		}
 }
 
 abstract class HTTPElement extends Enumeration {
