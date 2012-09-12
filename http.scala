@@ -1,4 +1,10 @@
-case class HTTPStatus(val code: java.lang.Integer) {
+trait HTTPVersionInfo {
+	def since: HTTPVersion
+}
+
+abstract class HTTPElement extends HTTPVersionInfo
+
+case class HTTPStatus(val code: java.lang.Integer) extends HTTPElement {
 	val messages = Map (
 		100 ->  ("Continued", HTTPVersion("1.1")),
 		101 ->  ("Switching Protocols", HTTPVersion("1.1")),
@@ -48,7 +54,7 @@ case class HTTPStatus(val code: java.lang.Integer) {
 		}
 	def since: HTTPVersion =
 		messages(code) match {
-			case Tuple2(_, since: HTTPVersion) => since
+			case Tuple2(_, v: HTTPVersion) => v
 			case _ => HTTPVersion("1.0")
 		}
 	override def toString = code + " " + message
@@ -63,97 +69,95 @@ case class HTTPVersion(val version: String) {
 	override
 	def toString = "HTTP/" + version;
 
-	def supports(element: Any) = 
-		element match {
-			case vs: HTTPElementEnumeration#ValueSince => { vs.since >= this }
-			case st: HTTPStatus => { st.since >= this }
-			case _ => true
-		}
+	def supports(element: HTTPVersionInfo) = element.since >= this
 }
 
 abstract class HTTPElementEnumeration extends Enumeration {
-	class ValueSince(name: String, val since: HTTPVersion) extends Val(nextId, name)
-	protected final def Value(name: String, since: HTTPVersion): ValueSince = new ValueSince(name, since)
+	class ValueSince(name: String, val v: HTTPVersion) extends Val(nextId, name) with HTTPVersionInfo {
+		def since: HTTPVersion = v
+	} 
+	def is(name: String): ValueSince = new ValueSince(name, HTTPVersion("1.0"))
+	def is(name: String, since: HTTPVersion): ValueSince = new ValueSince(name, since)
 }
 
 object HTTPMethod extends HTTPElementEnumeration {
-	val Connect 	= Value("CONNECT", HTTPVersion("1.1"))
-	val Delete 	= Value("DELETE", HTTPVersion("1.1"))
-	val Get		= Value("GET")
-	val Head 	= Value("HEAD")
-	val Options	= Value("OPTIONS", HTTPVersion("1.1"))
-	val Post	= Value("POST")
-	val Put		= Value("PUT", HTTPVersion("1.1"))
-	val Trace	= Value("TRACE", HTTPVersion("1.1"))
+	val Connect 	= is("CONNECT", HTTPVersion("1.1"))
+	val Delete 	= is("DELETE", HTTPVersion("1.1"))
+	val Get		= is("GET")
+	val Head 	= is("HEAD")
+	val Options	= is("OPTIONS", HTTPVersion("1.1"))
+	val Post	= is("POST")
+	val Put		= is("PUT", HTTPVersion("1.1"))
+	val Trace	= is("TRACE", HTTPVersion("1.1"))
 }
 
 object HTTPRequestHeader extends HTTPElementEnumeration {
-	val Accept		= Value("Accept")
-	val AcceptCharset	= Value("Accept-Charset")
-	val AcceptDatetime	= Value("Accept-Datetime")
-	val AcceptEncoding	= Value("Accept-Encoding")
-	val AcceptLanguage	= Value("Accept-Language")
-	val Authorization	= Value("Authorization")
-	val CacheControl	= Value("Cache-Control", HTTPVersion("1.1"))
-	val Connection		= Value("Connection", HTTPVersion("1.1"))
-	val ContentLength	= Value("Content-Length")
-	val ContentMD5		= Value("Content-MD5")
-	val ContentType		= Value("Content-Type")
-	val Cookie		= Value("Cookie")
-	val Date		= Value("Date")
-	val Expect		= Value("Expect", HTTPVersion("1.1"))
-	val From		= Value("From")
-	val Host		= Value("Host", HTTPVersion("1.1"))
-	val IfMatch		= Value("If-Match", HTTPVersion("1.1"))
-	val IfModifiedSince	= Value("If-Modified-Since")
-	val IfNoneMatch		= Value("If-None-Match", HTTPVersion("1.1"))
-	val IfRange		= Value("If-Range", HTTPVersion("1.1"))
-	val IfUnmodifiedSince	= Value("If-Unmodified-Since", HTTPVersion("1.1"))
-	val MaxForwards		= Value("Max-Forwards")
-	val Pragma		= Value("Pragma")
-	val ProxyAuthorization	= Value("Proxy-Authorization", HTTPVersion("1.1"))
-	val Range		= Value("Range", HTTPVersion("1.1"))
-	val Referer		= Value("Referer")
-	val TE			= Value("TE", HTTPVersion("1.1"))
-	val Upgrade		= Value("Upgrade", HTTPVersion("1.1"))
-	val UserAgent		= Value("User-Agent")
-	val Via			= Value("Via")
-	val Warning		= Value("Warning", HTTPVersion("1.1"))
+	val Accept		= is("Accept")
+	val AcceptCharset	= is("Accept-Charset")
+	val AcceptDatetime	= is("Accept-Datetime")
+	val AcceptEncoding	= is("Accept-Encoding")
+	val AcceptLanguage	= is("Accept-Language")
+	val Authorization	= is("Authorization")
+	val CacheControl	= is("Cache-Control", HTTPVersion("1.1"))
+	val Connection		= is("Connection", HTTPVersion("1.1"))
+	val ContentLength	= is("Content-Length")
+	val ContentMD5		= is("Content-MD5")
+	val ContentType		= is("Content-Type")
+	val Cookie		= is("Cookie")
+	val Date		= is("Date")
+	val Expect		= is("Expect", HTTPVersion("1.1"))
+	val From		= is("From")
+	val Host		= is("Host", HTTPVersion("1.1"))
+	val IfMatch		= is("If-Match", HTTPVersion("1.1"))
+	val IfModifiedSince	= is("If-Modified-Since")
+	val IfNoneMatch		= is("If-None-Match", HTTPVersion("1.1"))
+	val IfRange		= is("If-Range", HTTPVersion("1.1"))
+	val IfUnmodifiedSince	= is("If-Unmodified-Since", HTTPVersion("1.1"))
+	val MaxForwards		= is("Max-Forwards")
+	val Pragma		= is("Pragma")
+	val ProxyAuthorization	= is("Proxy-Authorization", HTTPVersion("1.1"))
+	val Range		= is("Range", HTTPVersion("1.1"))
+	val Referer		= is("Referer")
+	val TE			= is("TE", HTTPVersion("1.1"))
+	val Upgrade		= is("Upgrade", HTTPVersion("1.1"))
+	val UserAgent		= is("User-Agent")
+	val Via			= is("Via")
+	val Warning		= is("Warning", HTTPVersion("1.1"))
 }
 
 object HTTPResponseHeader extends HTTPElementEnumeration {
-	var AcceptRanges		= Value("Accept-Ranges")
-	var Age				= Value("Age", HTTPVersion("1.1"))
-	var Allow			= Value("Allow")
-	var CacheControl		= Value("Cache-Control")
-	var Connection			= Value("Connection", HTTPVersion("1.1"))
-	var ContentEncoding		= Value("Content-Encoding")
-	var ContentLanguage		= Value("Content-Language")
-	var ContentLength		= Value("Content-Length")
-	var ContentLocation		= Value("Content-Location")
-	var ContentMD5			= Value("Content-MD5")
-	var ContentDisposition		= Value("Content-Disposition")
-	var ContentRange		= Value("Content-Range", HTTPVersion("1.1"))
-	var ContentType			= Value("Content-Type")
-	var Date			= Value("Date")
-	var ETag			= Value("ETag")
-	var Expires			= Value("Expires")
-	var LastModified		= Value("Last-Modified")
-	var Link			= Value("Link")
-	var Location			= Value("Location")
-	var P3P				= Value("P3P")
-	var Pragma			= Value("Pragma")
-	var ProxyAuthenticate		= Value("Proxy-Authenticate", HTTPVersion("1.1"))
-	var Refresh			= Value("Refresh")
-	var RetryAfter			= Value("Retry-After")
-	var Server			= Value("Server")
-	var SetCookie			= Value("Set-Cookie")
-	var StrictTransportSecurity	= Value("Strict-Transport-Security")
-	var Trailer			= Value("Trailer", HTTPVersion("1.1"))
-	var TransferEncoding		= Value("Transfer-Encoding", HTTPVersion("1.1"))
-	var Vary			= Value("Vary", HTTPVersion("1.1"))
-	var Via				= Value("Via", HTTPVersion("1.1"))
-	var Warning			= Value("Warning")
-	var WWWAuthenticate		= Value("WWW-Authenticate")
+	var AcceptRanges		= is("Accept-Ranges")
+	var Age				= is("Age", HTTPVersion("1.1"))
+	var Allow			= is("Allow")
+	var CacheControl		= is("Cache-Control")
+	var Connection			= is("Connection", HTTPVersion("1.1"))
+	var ContentEncoding		= is("Content-Encoding")
+	var ContentLanguage		= is("Content-Language")
+	var ContentLength		= is("Content-Length")
+	var ContentLocation		= is("Content-Location")
+	var ContentMD5			= is("Content-MD5")
+	var ContentDisposition		= is("Content-Disposition")
+	var ContentRange		= is("Content-Range", HTTPVersion("1.1"))
+	var ContentType			= is("Content-Type")
+	var Date			= is("Date")
+	var ETag			= is("ETag")
+	var Expires			= is("Expires")
+	var LastModified		= is("Last-Modified")
+	var Link			= is("Link")
+	var Location			= is("Location")
+	var P3P				= is("P3P")
+	var Pragma			= is("Pragma")
+	var ProxyAuthenticate		= is("Proxy-Authenticate", HTTPVersion("1.1"))
+	var Refresh			= is("Refresh")
+	var RetryAfter			= is("Retry-After")
+	var Server			= is("Server")
+	var SetCookie			= is("Set-Cookie")
+	var StrictTransportSecurity	= is("Strict-Transport-Security")
+	var Trailer			= is("Trailer", HTTPVersion("1.1"))
+	var TransferEncoding		= is("Transfer-Encoding", HTTPVersion("1.1"))
+	var Vary			= is("Vary", HTTPVersion("1.1"))
+	var Via				= is("Via", HTTPVersion("1.1"))
+	var Warning			= is("Warning")
+	var WWWAuthenticate		= is("WWW-Authenticate")
 }
 
