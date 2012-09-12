@@ -65,18 +65,18 @@ case class HTTPVersion(val version: String) {
 
 	def supports(element: Any) = 
 		element match {
-			case vs: HTTPElement#ValueSince => { vs.since >= this }
+			case vs: HTTPElementEnumeration#ValueSince => { vs.since >= this }
 			case st: HTTPStatus => { st.since >= this }
 			case _ => true
 		}
 }
 
-abstract class HTTPElement extends Enumeration {
+abstract class HTTPElementEnumeration extends Enumeration {
 	class ValueSince(name: String, val since: HTTPVersion) extends Val(nextId, name)
 	protected final def Value(name: String, since: HTTPVersion): ValueSince = new ValueSince(name, since)
 }
 
-object HTTPMethod extends HTTPElement {
+object HTTPMethod extends HTTPElementEnumeration {
 	val Connect 	= Value("CONNECT", HTTPVersion("1.1"))
 	val Delete 	= Value("DELETE", HTTPVersion("1.1"))
 	val Get		= Value("GET")
@@ -87,7 +87,7 @@ object HTTPMethod extends HTTPElement {
 	val Trace	= Value("TRACE", HTTPVersion("1.1"))
 }
 
-object HTTPRequestHeader extends HTTPElement {
+object HTTPRequestHeader extends HTTPElementEnumeration {
 	val Accept		= Value("Accept")
 	val AcceptCharset	= Value("Accept-Charset")
 	val AcceptDatetime	= Value("Accept-Datetime")
@@ -121,7 +121,7 @@ object HTTPRequestHeader extends HTTPElement {
 	val Warning		= Value("Warning", HTTPVersion("1.1"))
 }
 
-object HTTPResponseHeader extends HTTPElement {
+object HTTPResponseHeader extends HTTPElementEnumeration {
 	var AcceptRanges		= Value("Accept-Ranges")
 	var Age				= Value("Age", HTTPVersion("1.1"))
 	var Allow			= Value("Allow")
