@@ -140,18 +140,13 @@ object HTTPRequestHeader extends HTTPGeneralHeader {
 }
 
 object HTTPResponseHeader extends HTTPGeneralHeader with HTTPEntityHeader {
-	var AcceptRanges		= is("Accept-Ranges")
+	var AcceptRanges		= is("Accept-Ranges", HTTPVersion("1.1"))
 	var Age				= is("Age", HTTPVersion("1.1"))
-	var ETag			= is("ETag")
-	var Link			= is("Link")
+	var ETag			= is("ETag", HTTPVersion("1.1"))
 	var Location			= is("Location")
-	var P3P				= is("P3P")
 	var ProxyAuthenticate		= is("Proxy-Authenticate", HTTPVersion("1.1"))
-	var Refresh			= is("Refresh")
-	var RetryAfter			= is("Retry-After")
+	var RetryAfter			= is("Retry-After", HTTPVersion("1.1"))
 	var Server			= is("Server")
-	var SetCookie			= is("Set-Cookie")
-	var StrictTransportSecurity	= is("Strict-Transport-Security")
 	var Vary			= is("Vary", HTTPVersion("1.1"))
 	var WWWAuthenticate		= is("WWW-Authenticate")
 }
