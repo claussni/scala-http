@@ -99,7 +99,7 @@ class HTTPGeneralHeader extends HTTPElementEnumeration {
 	var Trailer		= is("Trailer", HTTPVersion("1.1"))
 	var TransferEncoding	= is("Transfer-Encoding", HTTPVersion("1.1"))
 	val Upgrade		= is("Upgrade", HTTPVersion("1.1"))
-	val Via			= is("Via")
+	val Via			= is("Via", HTTPVersion("1.1"))
 	val Warning		= is("Warning", HTTPVersion("1.1"))
 }
 
