@@ -103,6 +103,20 @@ class HTTPGeneralHeader extends HTTPElementEnumeration {
 	val Warning		= is("Warning", HTTPVersion("1.1"))
 }
 
+trait HTTPEntityHeader extends HTTPElementEnumeration {
+	var Allow			= is("Allow")
+	var ContentEncoding		= is("Content-Encoding")
+	var ContentLanguage		= is("Content-Language")
+	var ContentLength		= is("Content-Length")
+	var ContentLocation		= is("Content-Location")
+	var ContentMD5			= is("Content-MD5")
+	var ContentDisposition		= is("Content-Disposition")
+	var ContentRange		= is("Content-Range", HTTPVersion("1.1"))
+	var ContentType			= is("Content-Type")
+	var Expires			= is("Expires")
+	var LastModified		= is("Last-Modified")
+}
+
 object HTTPRequestHeader extends HTTPGeneralHeader {
 	val Accept		= is("Accept")
 	val AcceptCharset	= is("Accept-Charset")
@@ -130,21 +144,10 @@ object HTTPRequestHeader extends HTTPGeneralHeader {
 	val UserAgent		= is("User-Agent")
 }
 
-object HTTPResponseHeader extends HTTPGeneralHeader {
+object HTTPResponseHeader extends HTTPGeneralHeader with HTTPEntityHeader {
 	var AcceptRanges		= is("Accept-Ranges")
 	var Age				= is("Age", HTTPVersion("1.1"))
-	var Allow			= is("Allow")
-	var ContentEncoding		= is("Content-Encoding")
-	var ContentLanguage		= is("Content-Language")
-	var ContentLength		= is("Content-Length")
-	var ContentLocation		= is("Content-Location")
-	var ContentMD5			= is("Content-MD5")
-	var ContentDisposition		= is("Content-Disposition")
-	var ContentRange		= is("Content-Range", HTTPVersion("1.1"))
-	var ContentType			= is("Content-Type")
 	var ETag			= is("ETag")
-	var Expires			= is("Expires")
-	var LastModified		= is("Last-Modified")
 	var Link			= is("Link")
 	var Location			= is("Location")
 	var P3P				= is("P3P")
